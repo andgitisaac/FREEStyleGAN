@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python -u test.py --input_dir /home/andgitisaac/dataset/input/ --output_dir /home/andgitisaac/FREEStyleGAN/output/original --decoder /home/andgitisaac/FREEStyleGAN/checkpoints/finetune_decoder/finetuned_decoder_iter_80000.pth --mask /home/andgitisaac/FREEStyleGAN/checkpoints/finetune_decoder/finetuned_maskModule_iter_80000.pth

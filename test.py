@@ -132,7 +132,7 @@ for prefix_name in prefix_names:
 
         if output.size() == style.size(): # Since some images may not be 512*512
             output_paste_back = combine_foreNback_with_mask(output, style, binary_mask).cpu()
-    output = output.cpu()
+    # output = output.cpu()
 
     mask_name = os.path.join(args.output_dir, '{}_softmask.jpg'.format(prefix_name))
     save_image(soft_mask, mask_name)
@@ -142,27 +142,25 @@ for prefix_name in prefix_names:
     # save_image(output, output_name)
 
     if output.size() == style.size():
-        output_name = os.path.join(args.output_dir, '{}_output_pasteBack.jpg'.format(prefix_name))
+        output_name = os.path.join(args.output_dir, '{}_output.jpg'.format(prefix_name))
         save_image(output_paste_back, output_name)
 
-    # # decode with sr_mask
-    # with torch.no_grad():
-    #     # output_sr = stylizer(generator, content, style, soft_mask, cl_mask=binary_mask, sr_mask=sr_mask, alpha=1.0)
-
-    #     # sr_mask now becomes the same mask as cl_mask
-    #     output_sr = stylizer(generator, content, style, soft_mask, cl_mask=binary_mask, sr_mask=binary_mask, alpha=1.0)
+    # decode with sr_mask
+    with torch.no_grad():
+        # sr_mask now becomes the same mask as cl_mask
+        output_sr = stylizer(generator, content, style, soft_mask, cl_mask=binary_mask, sr_mask=binary_mask, alpha=1.0)
     #     # output_sr = stylizer(generator, content, style, binary_mask, cl_mask=binary_mask, sr_mask=binary_mask, alpha=1.0)
 
-    #     if output.size() == style.size(): # Since some images may not be 512*512
-    #         output_paste_back_sr = combine_foreNback_with_mask(output_sr, style, binary_mask).cpu()
+        if output.size() == style.size(): # Since some images may not be 512*512
+            output_paste_back_sr = combine_foreNback_with_mask(output_sr, style, binary_mask).cpu()
     # output_sr = output_sr.cpu()
 
     # output_name = os.path.join(args.output_dir, '{}_output_sr.jpg'.format(prefix_name))
     # # save_image(output_sr, output_name)
 
-    # if output.size() == style.size():
-    #     output_name = os.path.join(args.output_dir, '{}_output_pasteBack_sr.jpg'.format(prefix_name))
-    #     save_image(output_paste_back_sr, output_name)
+    if output.size() == style.size():
+        output_name = os.path.join(args.output_dir, '{}_output_sr.jpg'.format(prefix_name))
+        save_image(output_paste_back_sr, output_name)
 
 print('Average time of {} images: {:.4f} secs'.format(len(prefix_names), timer/len(prefix_names)))
     
