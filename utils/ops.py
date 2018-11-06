@@ -34,6 +34,13 @@ def adaptive_instance_normalization(content_feat, style_feat, cl_mask=None, sr_m
     return normalized_feat * style_std.expand(size) + style_mean.expand(size)
 
 
+def calc_acc(pred, gt, bs):
+    pred = ((nn.Sigmoid()(pred)) > 0.5).cpu().numpy()
+    gt = (gt > 0.5).cpu().numpy()
+    acc = np.sum(pred == gt) / bs
+    return acc
+
+
 ### Model Related ###
 def save_model(weights, filename):
     for key in weights.keys():
