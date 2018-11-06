@@ -39,7 +39,7 @@ parser.add_argument('--save_model_interval', type=int, default=10000)
 args = parser.parse_args()
 
 cudnn.benchmark = True
-device = torch.device('cpu')
+device = torch.device('cuda')
 
 if not os.path.exists(args.save_dir):
     os.mkdir(args.save_dir)
