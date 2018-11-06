@@ -160,12 +160,12 @@ for step in tqdm(range(args.max_iter)):
     # Train D with real
     pred_label = global_discriminator(real_global)
     loss_d_real = criterion(pred_label, gt_real)
-    acc_d_real_global = calc_acc(pred_label, real_label)
+    acc_d_real_global = calc_acc(pred_label, real_label, args.batch_size)
 
     # Train D with fake
     pred_label = global_discriminator(fake_global.detach())
     loss_d_fake = criterion(pred_label, gt_fake)
-    acc_d_fake_global = calc_acc(pred_label, fake_label)
+    acc_d_fake_global = calc_acc(pred_label, fake_label, args.batch_size)
 
     loss_D_global = (loss_d_real + loss_d_fake) / 2
     loss_D_global = args.adversarial_weight * loss_D_global

@@ -185,12 +185,12 @@ for step in tqdm(range(args.max_iter)):
     # Train Content D with real
     pred_label = local_content_discriminator(real_local)
     loss_d_content_real = criterion(pred_label, gt_real)
-    acc_d_content_real_local = calc_acc(pred_label, real_label)
+    acc_d_content_real_local = calc_acc(pred_label, real_label, args.batch_size)
 
     # Train Content D with fake
     pred_label = local_content_discriminator(fake_local.detach())
     loss_d_content_fake = criterion(pred_label, gt_fake)
-    acc_d_content_fake_local = calc_acc(pred_label, fake_label)
+    acc_d_content_fake_local = calc_acc(pred_label, fake_label, args.batch_size)
 
     loss_D_content_local = (loss_d_content_real + loss_d_content_fake) / 2
     loss_D_content_local = args.adversarial_weight * loss_D_content_local
@@ -237,12 +237,12 @@ for step in tqdm(range(args.max_iter)):
     # Train D with real
     pred_label = local_mask_discriminator(real_local)
     loss_d_mask_real = criterion(pred_label, gt_real)
-    acc_d_mask_real_local = calc_acc(pred_label, real_label)
+    acc_d_mask_real_local = calc_acc(pred_label, real_label, args.batch_size)
 
     # Train D with fake
     pred_label = local_mask_discriminator(fake_local.detach())
     loss_d_mask_fake = criterion(pred_label, gt_fake)
-    acc_d_mask_fake_local = calc_acc(pred_label, fake_label)
+    acc_d_mask_fake_local = calc_acc(pred_label, fake_label, args.batch_size)
 
     loss_D_mask_local = (loss_d_mask_real + loss_d_mask_fake) / 2
     loss_D_mask_local = args.adversarial_weight * loss_D_mask_local
