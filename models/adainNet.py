@@ -59,6 +59,8 @@ class Generator(nn.Module):
         # decoder
         self.decoder = decoder
 
+        self.downsample = nn.Sequential(nn.MaxPool2d((2, 2), (2, 2), (0, 0), ceil_mode=True))
+
         # fix the encoder
         for name in ['enc_1', 'enc_2', 'enc_3', 'enc_4']:
             for param in getattr(self, name).parameters():
@@ -82,3 +84,11 @@ class Generator(nn.Module):
         stylized_output = self.decoder(stylized_feat)
 
         return stylized_output
+    
+    def stack_mask_dim(self, mask, n_channel, downsample_times):
+        '''Stack mask n_channel times and downsample it downsample_times times.'''
+        stack_masks = torch.squeeze(mask, dim=1)                    # bs x 1 x 256 x 256 -> bs x 256 x 256
+        for _ in range(downsample_times):
+            stack_masks = self.downsample(stack_masks)              # bs x 256 x 256 -> bs x (256/2^downsample_times) x (256/2^downsample_times)
+        stack_masks = torch.stack([stack_masks]*n_channel, dim=1)   # bs x 32 x (256/2^downsample_times) x (256/2^downsample_times)
+        return stack_masks
